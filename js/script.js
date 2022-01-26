@@ -114,20 +114,21 @@ function afficherLoader() {
 function afficherFicheJeuVideo(unJeu) {
     sectionPage.innerHTML = "";
 
+    
     const divFicheJeuVideo = document.createElement("div");
     divFicheJeuVideo.classList.add("divFicheJeuVideo");
     divFicheJeuVideo.innerHTML=`
-        <div class="ligne1"> 
-            <span>${unJeu.nom}</span>
-            <div class="divImage">
+    <div class="ligne1"> 
+    <span>${unJeu.nom}</span>
+    <div class="divImage">
                 <img src="${unJeu.imageSmallURL}" alt="Image du jeu ${unJeu.nom}"/>
             </div>    
         </div>
         <div class="ligne2">
-            <div class="divPlateforme">Plateformes : </div>
-            <div class="divDateJeu">
-                <p class="paragrapheDateSortie">Sortie en : </p>
-                <span class="spanDate">${unJeu.dateSortie ? unJeu.dateSortie : "Date indisponible !"}</span>
+        <div class="divPlateforme">Plateformes : </div>
+        <div class="divDateJeu">
+        <p class="paragrapheDateSortie">Sortie en : </p>
+        <span class="spanDate">${unJeu.dateSortie ? unJeu.dateSortie : "Date indisponible !"}</span>
             </div>
         </div>
         <div class="ligne3">
@@ -137,41 +138,126 @@ function afficherFicheJeuVideo(unJeu) {
             </div>
         </div>
         <div class="ligne4">
-            <div class="btnFavoris btnAjouterFavoris">Ajouter dans favoris</div>
-            <div class="btnFavoris btnRetirerFavoris">Retirer des favoris</div>
+        <div class="btnFavoris btnAjouterFavoris">Ajouter dans favoris</div>
+        <div class="btnFavoris btnRetirerFavoris">Retirer des favoris</div>
         </div>
-    `;
-
-    const paragrapheDateSortie = divFicheJeuVideo.querySelector(".paragrapheDateSortie");
-    let dateAujourdhui = new Date();
-    if (unJeu.dateSortie > dateAujourdhui.getFullYear()) {
-        paragrapheDateSortie.innerText = "Sortie prévue :";
-    }
-
-    const afficherPlateforme = divFicheJeuVideo.querySelector(".divPlateforme");
-    for (let i = 0; i < unJeu.plateformes.length; i++) {
-        if (i > 3) {
-            const resteDesPlateformes = document.createElement("span");
-            resteDesPlateformes.classList.add("resteDesPlateformes");
-            resteDesPlateformes.innerText = `+${unJeu.plateformes.length - 4}`;
-            afficherPlateforme.append(resteDesPlateformes);
-            break;
-        } else {
-        const unePlateforme = document.createElement("span");
-        unePlateforme.innerText = unJeu.plateformes[i];
-        afficherPlateforme.append(unePlateforme);
+        `;
+        
+        const paragrapheDateSortie = divFicheJeuVideo.querySelector(".paragrapheDateSortie");
+        let dateAujourdhui = new Date();
+        if (unJeu.dateSortie > dateAujourdhui.getFullYear()) {
+            paragrapheDateSortie.innerText = "Sortie prévue :";
         }
+        
+        const afficherPlateforme = divFicheJeuVideo.querySelector(".divPlateforme");
+        for (let i = 0; i < unJeu.plateformes.length; i++) {
+            if (i > 3) {
+                const resteDesPlateformes = document.createElement("span");
+                resteDesPlateformes.classList.add("resteDesPlateformes");
+                resteDesPlateformes.innerText = `+${unJeu.plateformes.length - 4}`;
+                afficherPlateforme.append(resteDesPlateformes);
+                break;
+            } else {
+                const unePlateforme = document.createElement("span");
+                unePlateforme.innerText = unJeu.plateformes[i];
+                afficherPlateforme.append(unePlateforme);
+            }
+        }
+        
+        const btnAjouterFavoris = divFicheJeuVideo.querySelector(".btnAjouterFavoris");
+        if (!btnAjouterFavoris) {
+            throw new error ("btnAjouterFavoris introuvable");
+        }
+
+        btnAjouterFavoris.addEventListener("click", afficherPopUpAjouterFavoris);
+
+        const btnRetirerFavoris = divFicheJeuVideo.querySelector(".btnRetirerFavoris");
+        if (!btnRetirerFavoris) {
+            throw new error ("btnRetirerFavoris introuvable");
+        }
+
+        btnRetirerFavoris.addEventListener("click", afficherPopupRetirerFavoris);
+
+        sectionPage.append(divFicheJeuVideo);
+        
     }
+    
+function afficherPopUpAjouterFavoris() {
 
-    sectionPage.append(divFicheJeuVideo);
+    const popup = document.createElement("div");
+    popup.classList.add("popup")
+    popup.id = "popup-1";
+    sectionPage.append(popup);
 
+    const overlay = document.createElement("div");
+    overlay.classList.add("overlay");
+    popup.append(overlay);
+
+    const content = document.createElement("div");
+    content.classList.add("content");
+    content.innerHTML = `
+        <div class="close-btn" onclick="afficherPopUpAjouterFavoris()">&times;</div>
+        <h1>Favoris</h1>
+        <p>Le jeu a bien été ajouté dans vos favoris.</p>
+    `;
+    
+    popup.append(content);
+
+    document.getElementById("popup-1").classList.toggle("active");
 }
 
-// function testFonctionPlateformes() {
-//     for (let i = 0; i < plateformes.length; i++) {
-//         return divUnJeuVideo.innerHTML = `<p>${unJeu.plateformes[i]}</p>`;
-//     };
-// }
+function afficherPopupRetirerFavoris() {
+    const popup = document.createElement("div");
+    popup.classList.add("popup")
+    popup.id = "popup-2";
+    sectionPage.append(popup);
+
+    const overlay = document.createElement("div");
+    overlay.classList.add("overlay");
+    popup.append(overlay);
+
+    const content = document.createElement("div");
+    content.classList.add("content");
+    content.innerHTML = `
+        <h2>Favoris</h2>
+        <p>Voulez-vous vraiment retirer ce jeu de vos favoris ?</p>
+        <div class="btnPopupValiderRefuser">
+            <div class="lesBtnPopup btnPopupValider" onclick="afficherValidationPopupRetirerFavoris()">Valider</div>
+            <div class="lesBtnPopup btnPopupRefuser" onclick="afficherPopupRetirerFavoris()">Refuser</div>
+        </div>
+    `;
+    popup.append(content);
+
+    document.getElementById("popup-2").classList.toggle("active");
+}
+
+function afficherValidationPopupRetirerFavoris() {
+    const popup = document.createElement("div");
+    popup.classList.add("popup")
+    popup.id = "popup-3";
+    sectionPage.append(popup);
+
+    const overlay = document.createElement("div");
+    overlay.classList.add("overlay");
+    popup.append(overlay);
+
+    const content = document.createElement("div");
+    content.classList.add("content");
+    content.innerHTML = `
+        <div class="close-btn" onclick="fermerPopupValiderRetirerFavoris()">&times;</div>
+        <h2>Favoris</h2>
+        <p>Le jeu a bien été retirer de vos favoris</p>
+    `;
+    popup.append(content);
+
+    document.getElementById("popup-2").classList.toggle("active");
+    document.getElementById("popup-3").classList.toggle("active");
+}
+
+function fermerPopupValiderRetirerFavoris() {
+    document.getElementById("popup-3").classList.toggle("active");
+}
+
 
 
 async function telechargerDonnees() {

@@ -16,14 +16,163 @@ function init() {
         throw new error("btnRechercher introuvable");
     }
 
-    btnRechercher.addEventListener("click", clickBtnRechercher);
+    btnRechercher.addEventListener("click", clickBtnRechercherJeux);
+    
+    const btnFavoris = document.querySelector(".btnFavoris");
+
+    if (!btnFavoris) {
+        throw new error("btnFavoris introuvable");
+    }
+
+    btnFavoris.addEventListener("click", afficherLoader)
 
 }
 
-async function clickBtnRechercher() {
+async function clickBtnRechercherJeux() {
+    
+    afficherLoader();
+
+    const inputRechercher = document.querySelector(".inputRechercher")
+    const valeurInputRechercher = inputRechercher.value;
+    const resultatRechercher = await fetch(`https://www.giantbomb.com/api/games/?api_key=ca43860b5e3eb1bc2856b5612843ec8e65f53a5a&format=json&filter=name:${valeurInputRechercher}`);
+    const resultatRequeteJson = await resultatRechercher.json();
+    const listeResultatJeux = resultatRequeteJson.results;
+
+
+    sectionPage.innerHTML= "";
+
+    const divJeuxVideo = document.createElement("div");
+    divJeuxVideo.classList.add("divJeuxVideo");
+    sectionPage.append(divJeuxVideo);
+
+    for (let i = 0; i < listeResultatJeux.length; i++) {
+        const unJeuJson = listeResultatJeux[i];
+        const unJeu = new JeuxVideo(unJeuJson);
+
+        const divUnJeuVideo = document.createElement("div");
+        divUnJeuVideo.classList.add("divSelectionUnJeuVideo");
+        divUnJeuVideo.innerHTML = `
+            <img class="grandeImageJeu" src="${unJeu.imageScreenURL}" alt="Image jeu du jeu : ${unJeu.nom}"/>
+            <div class="lesPlateformes"></div>
+            <p class="nomJeu">${unJeu.nom}</p>
+
+            
+        `;
+        //<div>${unJeu.plateformes}</div>
+
+        const afficherPlateforme = divUnJeuVideo.querySelector(".lesPlateformes");
+        for (let i = 0; i < unJeu.plateformes.length; i++) {
+            if (i > 3) {
+                const resteDesPlateformes = document.createElement("span");
+                resteDesPlateformes.classList.add("resteDesPlateformes");
+                resteDesPlateformes.innerText = `+${unJeu.plateformes.length - 4}`;
+                afficherPlateforme.append(resteDesPlateformes);
+                break;
+            } else  {
+                const unePlateforme = document.createElement("span");
+                unePlateforme.innerText = unJeu.plateformes[i];
+                afficherPlateforme.append(unePlateforme);
+            }
+        }
+        
+        divUnJeuVideo.onclick = () => {
+            afficherFicheJeuVideo(unJeu);
+        }
+
+
+        divJeuxVideo.append(divUnJeuVideo);
+    }
+}
+
+function afficherLoader() {
     sectionPage.innerHTML = "";
-    const mapJeuxVideo = await telechargerDonnees();
+
+    const loader = document.createElement("div");
+    loader.classList.add("loader");
+    loader.innerHTML = `
+        <h2>Loading...</h2>
+    `;
+    sectionPage.append(loader);
+
+    const loaderPoint = document.createElement("div");
+    loaderPoint.classList.add("loaderPoint");
+    loaderPoint.innerHTML = `
+        <div class="point" style="--i:0;"></div>
+        <div class="point" style="--i:1;"></div>
+        <div class="point" style="--i:2;"></div>
+        <div class="point" style="--i:3;"></div>
+        <div class="point" style="--i:4;"></div>
+        <div class="point" style="--i:5;"></div>
+        <div class="point" style="--i:6;"></div>
+        <div class="point" style="--i:7;"></div>
+        <div class="point" style="--i:8;"></div>
+        <div class="point" style="--i:9;"></div>
+    `;
+    loader.append(loaderPoint);
 }
+
+function afficherFicheJeuVideo(unJeu) {
+    sectionPage.innerHTML = "";
+
+    const divFicheJeuVideo = document.createElement("div");
+    divFicheJeuVideo.classList.add("divFicheJeuVideo");
+    divFicheJeuVideo.innerHTML=`
+        <div class="ligne1"> 
+            <span>${unJeu.nom}</span>
+            <div class="divImage">
+                <img src="${unJeu.imageSmallURL}" alt="Image du jeu ${unJeu.nom}"/>
+            </div>    
+        </div>
+        <div class="ligne2">
+            <div class="divPlateforme">Plateformes : </div>
+            <div class="divDateJeu">
+                <p class="paragrapheDateSortie">Sortie en : </p>
+                <span class="spanDate">${unJeu.dateSortie ? unJeu.dateSortie : "Date indisponible !"}</span>
+            </div>
+        </div>
+        <div class="ligne3">
+            <span>${unJeu.descriptionCourte ? unJeu.descriptionCourte : "Pas de description disponible !"}</span>
+            <div class="divDescriptionLongue encadrer">
+                <span>${unJeu.descriptionLongue && unJeu.descriptionLongue.trim().length > 0 ? unJeu.descriptionLongue : "Pas de description disponible !"}</span>
+            </div>
+        </div>
+        <div class="ligne4">
+            <div class="btnFavoris btnAjouterFavoris">Ajouter dans favoris</div>
+            <div class="btnFavoris btnRetirerFavoris">Retirer des favoris</div>
+        </div>
+    `;
+
+    const paragrapheDateSortie = divFicheJeuVideo.querySelector(".paragrapheDateSortie");
+    let dateAujourdhui = new Date();
+    if (unJeu.dateSortie > dateAujourdhui.getFullYear()) {
+        paragrapheDateSortie.innerText = "Sortie prévue :";
+    }
+
+    const afficherPlateforme = divFicheJeuVideo.querySelector(".divPlateforme");
+    for (let i = 0; i < unJeu.plateformes.length; i++) {
+        if (i > 3) {
+            const resteDesPlateformes = document.createElement("span");
+            resteDesPlateformes.classList.add("resteDesPlateformes");
+            resteDesPlateformes.innerText = `+${unJeu.plateformes.length - 4}`;
+            afficherPlateforme.append(resteDesPlateformes);
+            break;
+        } else {
+        const unePlateforme = document.createElement("span");
+        unePlateforme.innerText = unJeu.plateformes[i];
+        afficherPlateforme.append(unePlateforme);
+        }
+    }
+
+    sectionPage.append(divFicheJeuVideo);
+
+}
+
+// function testFonctionPlateformes() {
+//     for (let i = 0; i < plateformes.length; i++) {
+//         return divUnJeuVideo.innerHTML = `<p>${unJeu.plateformes[i]}</p>`;
+//     };
+// }
+
 
 async function telechargerDonnees() {
     if (mapJeuxVideo.size > 0) {
@@ -42,6 +191,7 @@ async function telechargerDonnees() {
             const unJeu = new JeuxVideo(listeJeuxVideo[i]);
             mapJeuxVideo.set(unJeu.id, unJeu);
         }
+        
         // console.log(listeJeuxVideo);
         // console.log(mapJeuxVideo);
         return mapJeuxVideo;
@@ -68,14 +218,12 @@ class JeuxVideo {
         this.nom = listeJeuxVideo.name;
 
         const tabPlateformesJeuxVideo = [];
-        if (listeJeuxVideo.platforms.length > 0){
-            for (let i = 0; i < listeJeuxVideo.platforms.length; i++) {
-                const unePlateforme = listeJeuxVideo.platforms[i].abbreviation;
-                tabPlateformesJeuxVideo.push(unePlateforme);
-            }
-        } else {
-            tabPlateformesJeuxVideo = null;
+
+        for (let i = 0; i < listeJeuxVideo.platforms.length; i++) {
+            const unePlateforme = listeJeuxVideo.platforms[i].abbreviation;
+            tabPlateformesJeuxVideo.push(unePlateforme);
         }
+
 
         this.plateformes = tabPlateformesJeuxVideo;
 

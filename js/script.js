@@ -52,7 +52,7 @@ async function clickBtnRechercherJeux() {
         const divUnJeuVideo = document.createElement("div");
         divUnJeuVideo.classList.add("divSelectionUnJeuVideo");
         divUnJeuVideo.innerHTML = `
-            <img class="grandeImageJeu" src="${unJeu.imageScreenURL}" alt="Image jeu du jeu : ${unJeu.nom}"/>
+            <img class="grandeImageJeu" src="${unJeu.imageScreenURL}" alt="Image du jeu : ${unJeu.nom}"/>
             <div class="lesPlateformes"></div>
             <p class="nomJeu">${unJeu.nom}</p>
             

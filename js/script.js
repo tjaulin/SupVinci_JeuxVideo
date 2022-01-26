@@ -55,7 +55,6 @@ async function clickBtnRechercherJeux() {
             <img class="grandeImageJeu" src="${unJeu.imageScreenURL}" alt="Image jeu du jeu : ${unJeu.nom}"/>
             <div class="lesPlateformes"></div>
             <p class="nomJeu">${unJeu.nom}</p>
-
             
         `;
         //<div>${unJeu.plateformes}</div>
@@ -138,11 +137,16 @@ function afficherFicheJeuVideo(unJeu) {
             </div>
         </div>
         <div class="ligne4">
-        <div class="btnFavoris btnAjouterFavoris">Ajouter dans favoris</div>
+        <div class="btnFavoris btnAjouterFavoris">Ajouter aux favoris</div>
         <div class="btnFavoris btnRetirerFavoris">Retirer des favoris</div>
         </div>
         `;
         
+        const nbPlateformes = divFicheJeuVideo.querySelector(".divPlateforme");
+        if (unJeu.plateformes.length === 1) {
+            nbPlateformes.innerText = "Plateforme : ";
+        }
+
         const paragrapheDateSortie = divFicheJeuVideo.querySelector(".paragrapheDateSortie");
         let dateAujourdhui = new Date();
         if (unJeu.dateSortie > dateAujourdhui.getFullYear()) {

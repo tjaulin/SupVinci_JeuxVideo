@@ -171,3 +171,20 @@ div.ligne4 .btnRetirerFavoris:hover {
     cursor: pointer;
 }
 
+/* Bonus */
+
+.btnRetour {
+    text-align: center;
+    border: 2px solid black;
+    width: 90px;
+    height: 20px;
+    padding: 0.5rem;
+    margin: 0.5rem;
+    transition: background-color 0.5s;
+}
+
+.btnRetour:hover {
+    background-color: black;
+    color: white;
+    cursor: pointer;
+}

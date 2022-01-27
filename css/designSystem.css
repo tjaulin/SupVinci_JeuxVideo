@@ -1,0 +1,83 @@
+/* Style de bordure + scrollbar */
+.encadrer {
+    border: 4px solid black;
+    -webkit-box-shadow: 5px 5px 5px 0px #000000, inset 4px 4px 15px 0px #000000, 5px 5px 15px 5px rgba(0,0,0,0); 
+    box-shadow: 5px 5px 5px 0px #000000, inset 4px 4px 15px 0px #000000, 5px 5px 15px 5px rgba(0,0,0,0);
+    border-radius: 15px;
+    
+}
+
+.encadrer::-webkit-scrollbar {
+    width: 15px;
+}
+
+.encadrer::-webkit-scrollbar-track {
+    border-radius: 10px;
+    background: white;
+}
+
+.encadrer::-webkit-scrollbar-thumb {
+    background-color: black;
+    border-radius: 30px;
+    border: 3px solid white;
+}
+
+/* Loader Animation */
+section .loader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, 0);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+  
+section .loader h2 {
+  color: black;
+  font-weight: 300;
+  letter-spacing: 10px;
+}
+
+section .loader .loaderPoint {
+  display: flex;
+}
+
+section .loader .loaderPoint .point {
+  position: relative;
+  display: block;
+  width: 20px;
+  height: 20px;
+  background: #fff;
+  margin: 20px 10px;
+  transform: scale(0.1);
+  border-radius: 50%;
+  animation: animateDot 2s linear infinite;
+  animation-delay: calc(0.1s * var(--i));
+  background: black;
+  box-shadow: 0 0 10px black,
+              0 0 20px black,
+              0 0 40px black,
+              0 0 60px black,
+              0 0 80px black,
+              0 0 100px black;
+}
+@keyframes animateDot {
+  0%
+  {
+    transform: scale(0.1);
+  }
+  10%
+  {
+    transform: scale(1);
+  }
+  50%
+  {
+    transform: scale(0.1);
+  }
+  100%
+  {
+    transform: scale(0.1);
+  }
+}

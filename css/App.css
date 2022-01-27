@@ -1,0 +1,147 @@
+/*Background général*/
+
+html {
+    font-family: 'Permanent Marker', cursive;
+    
+}
+
+body {
+    max-width: 1200px;
+    margin: auto;
+    /* background-image: repeating-linear-gradient(312deg, hsla(64,83%,54%,0.05) 0px, hsla(64,83%,54%,0.05) 1px,transparent 1px, transparent 11px,hsla(64,83%,54%,0.05) 11px, hsla(64,83%,54%,0.05) 12px,transparent 12px, transparent 32px),repeating-linear-gradient(357deg, hsla(64,83%,54%,0.05) 0px, hsla(64,83%,54%,0.05) 1px,transparent 1px, transparent 11px,hsla(64,83%,54%,0.05) 11px, hsla(64,83%,54%,0.05) 12px,transparent 12px, transparent 32px),repeating-linear-gradient(267deg, hsla(64,83%,54%,0.05) 0px, hsla(64,83%,54%,0.05) 1px,transparent 1px, transparent 11px,hsla(64,83%,54%,0.05) 11px, hsla(64,83%,54%,0.05) 12px,transparent 12px, transparent 32px),repeating-linear-gradient(402deg, hsla(64,83%,54%,0.05) 0px, hsla(64,83%,54%,0.05) 1px,transparent 1px, transparent 11px,hsla(64,83%,54%,0.05) 11px, hsla(64,83%,54%,0.05) 12px,transparent 12px, transparent 32px),linear-gradient(357deg, rgb(127,127,127),rgba(215,207,207, 0.48)); */
+    background-image: url(../image/5184157.jpg);
+    background-size: auto;
+    /* background-image: linear-gradient(135deg, rgba(159, 159, 159, 0.46) 0%, rgba(159, 159, 159, 0.46) 14.286%,rgba(165, 165, 165, 0.46) 14.286%, rgba(165, 165, 165, 0.46) 28.572%,rgba(171, 171, 171, 0.46) 28.572%, rgba(171, 171, 171, 0.46) 42.858%,rgba(178, 178, 178, 0.46) 42.858%, rgba(178, 178, 178, 0.46) 57.144%,rgba(184, 184, 184, 0.46) 57.144%, rgba(184, 184, 184, 0.46) 71.43%,rgba(190, 190, 190, 0.46) 71.43%, rgba(190, 190, 190, 0.46) 85.716%,rgba(196, 196, 196, 0.46) 85.716%, rgba(196, 196, 196, 0.46) 100.002%),linear-gradient(45deg, rgb(252, 252, 252) 0%, rgb(252, 252, 252) 14.286%,rgb(246, 246, 246) 14.286%, rgb(246, 246, 246) 28.572%,rgb(241, 241, 241) 28.572%, rgb(241, 241, 241) 42.858%,rgb(235, 235, 235) 42.858%, rgb(235, 235, 235) 57.144%,rgb(229, 229, 229) 57.144%, rgb(229, 229, 229) 71.43%,rgb(224, 224, 224) 71.43%, rgb(224, 224, 224) 85.716%,rgb(218, 218, 218) 85.716%, rgb(218, 218, 218) 100.002%); */
+    /* background-image: linear-gradient(135deg, rgba(244, 244, 244,0.07) 0%, rgba(244, 244, 244,0.07) 12.5%,rgba(211, 211, 211,0.07) 12.5%, rgba(211, 211, 211,0.07) 25%,rgba(178, 178, 178,0.07) 25%, rgba(178, 178, 178,0.07) 37.5%,rgba(145, 145, 145,0.07) 37.5%, rgba(145, 145, 145,0.07) 50%,rgba(113, 113, 113,0.07) 50%, rgba(113, 113, 113,0.07) 62.5%,rgba(80, 80, 80,0.07) 62.5%, rgba(80, 80, 80,0.07) 75%,rgba(47, 47, 47,0.07) 75%, rgba(47, 47, 47,0.07) 87.5%,rgba(14, 14, 14,0.07) 87.5%, rgba(14, 14, 14,0.07) 100%),linear-gradient(45deg, rgba(236, 236, 236,0.07) 0%, rgba(236, 236, 236,0.07) 12.5%,rgba(210, 210, 210,0.07) 12.5%, rgba(210, 210, 210,0.07) 25%,rgba(183, 183, 183,0.07) 25%, rgba(183, 183, 183,0.07) 37.5%,rgba(157, 157, 157,0.07) 37.5%, rgba(157, 157, 157,0.07) 50%,rgba(130, 130, 130,0.07) 50%, rgba(130, 130, 130,0.07) 62.5%,rgba(104, 104, 104,0.07) 62.5%, rgba(104, 104, 104,0.07) 75%,rgba(77, 77, 77,0.07) 75%, rgba(77, 77, 77,0.07) 87.5%,rgba(51, 51, 51,0.07) 87.5%, rgba(51, 51, 51,0.07) 100%),linear-gradient(90deg, #ffffff,#ffffff); */
+}
+
+header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+header a {
+    display: flex;
+    text-decoration: none;
+    color: black;
+}
+
+img {
+    max-width: 100%;
+    max-height: 100%;
+}
+a .imgLogo {
+    height: 100px;
+    width: 100px;
+    margin-right: 2.5rem;
+}
+
+nav {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+    height: 100px;
+    /* border: 4px solid black; */
+}
+
+ul {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 50%;
+    width: 60%;
+    list-style: none;
+    /* border: 4px solid red; */
+    padding: 10px;
+}
+.inputRechercher{
+    border-radius: 6px;
+    height: 21px;
+    width: 316px;
+}
+.inputRechercher::placeholder{
+    color: black;
+}
+.btn {
+    text-align: center;
+    border: 3px solid black;
+    border-radius: 6px;
+    background-color: white;
+    transition: background-color 0.5s;
+}
+.btn:hover {
+    background-color: black;
+    color: white;
+    cursor: pointer;
+}
+.btnRechercher {
+    width: 100px;
+}
+.btnFavoris {
+    width: 150px;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* border: 4px solid green; */
+}
+
+main section {
+    overflow: auto;
+    height: 495px;
+    border: 4px solid black;
+    -webkit-box-shadow: 5px 5px 5px 0px #000000, inset 4px 4px 15px 0px #000000, 5px 5px 15px 5px rgba(0,0,0,0); 
+    box-shadow: 5px 5px 5px 0px #000000, inset 4px 4px 15px 0px #000000, 5px 5px 15px 5px rgba(0,0,0,0);
+}
+
+.paragrapheRechercherJeu {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, 50%);
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+footer {
+    display: flex;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+.footerDev {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* border: 4px solid red; */
+    width: 40%;
+}
+.imgFooter {
+    height: 1.2rem;
+    margin: 0 0.5rem 0 0.1rem;
+}
+.divFooterDev, .divFooterEmailDev {
+    display: flex;
+    align-items: center;
+}
+.liensExternes {
+    display: flex;
+    justify-content: space-evenly;
+    /* border: 3px solid green; */
+    width: 50%;
+}
+.liensExternes a {
+    color: black;
+    transition: color 0.2s;
+}
+.liensExternes a:hover {
+    color: grey;
+}
+.divImgGiantBomb, .divImgSupVinci {
+    display: flex;
+    align-items: baseline;
+    /* border: 2px solid yellow; */
+    margin-top: 13px;
+}

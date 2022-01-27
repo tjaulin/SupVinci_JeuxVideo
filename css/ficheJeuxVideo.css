@@ -1,0 +1,173 @@
+/* Div fiche jeu video */
+.divFicheJeuVideo {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    width: 1077px;
+}
+
+.ligne1, .ligne2, .ligne3, .ligne4 {
+    display: flex;
+    margin: 0.2rem 1rem 0.2rem 1rem;
+}
+
+div.ligne1 span {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 60%;
+    font-size: 20px;
+}
+div.ligne1 .divImage {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40%;
+}
+
+div.ligne2 .divPlateforme {
+    width: 80%;
+}
+div.ligne2 .divDateJeu{
+    width: 20%;
+}
+div.ligne2 .divDateJeu p {
+    margin: 0;
+}
+
+div.ligne2 div.divPlateforme span {
+    border: 1px solid black;
+    background-color: black;
+    border-radius: 30px;
+    color: white;
+    margin-right: 1rem;
+    padding: 0.5rem;
+    font-size: 10px;
+}
+
+div.ligne3 {
+    display: flex;
+    flex-direction: column;
+}
+div.ligne3 .divDescriptionLongue {
+    width: 68rem;
+    height: 18rem;
+    overflow: auto;
+    border: 2px solid black;
+}
+div.ligne3 span {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+div.ligne4 {
+    justify-content: space-evenly;
+    align-items: center;
+}
+div.ligne4 .btnFavoris {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 40%;
+    border-radius: 30px;
+    transition: background-color 0.5s;
+}
+div.ligne4 .btnAjouterFavoris {
+    border: 2px solid rgb(1, 245, 13);
+}
+div.ligne4 .btnRetirerFavoris {
+    border: 2px solid rgb(245, 8, 0);
+}
+
+div.ligne4 .btnAjouterFavoris:hover {
+    background-color: rgb(1, 245, 13);
+    cursor: pointer;
+}
+div.ligne4 .btnRetirerFavoris:hover {
+    background-color: rgb(245, 8, 0);
+    cursor: pointer;
+}
+
+/* Popup Favoris */
+
+.popup .overlay {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.7);
+    z-index: 1;
+    display: none;
+}
+
+.popup .content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    background: white;
+    width: 450px;
+    height: 220px;
+    z-index: 2;
+    text-align: center;
+    padding: 20px;
+    box-sizing: border-box; 
+}
+
+.popup .close-btn {
+    cursor: pointer;
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    width: 30px;
+    height: 30px;
+    background: black;
+    color: white;
+    font-size: 25px;
+    font-weight: 600;
+    line-height: 25px;
+    border-radius: 50%;
+}
+
+.popup.active .overlay {
+    display: block;
+}
+
+.popup.active .content {
+    transition: all 300ms ease-in-out;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+/* Popup Retirer Favoris */
+.popup .btnPopupValiderRefuser {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.popup .btnPopupValiderRefuser .lesBtnPopup {
+    padding: 0.2rem;
+    border-radius: 15px;
+    transition: background-color 0.5s;
+}
+
+.popup .btnPopupValiderRefuser .btnPopupValider {
+    border: 2px solid rgb(1, 245, 13);
+}
+
+.popup .btnPopupValiderRefuser .btnPopupRefuser {
+    border: 2px solid rgb(245, 8, 0);
+}
+
+.popup .btnPopupValiderRefuser .btnPopupValider:hover {
+    background-color: rgb(1, 245, 13);
+    cursor: pointer;
+}
+
+.popup .btnPopupValiderRefuser .btnPopupRefuser:hover {
+    background-color: rgb(245, 8, 0);
+    cursor: pointer;
+}
+

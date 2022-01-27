@@ -1,0 +1,41 @@
+/* Div selecteur jeux video */
+.divJeuxVideo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.divSelectionUnJeuVideo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 32%;
+    border-radius: 0.3rem;
+    padding: 0.3rem;
+    transition: background-color 0.5s;
+}
+
+.divSelectionUnJeuVideo:hover {
+    background-color: black;
+    color: white;
+    cursor: pointer;
+}
+
+.divSelectionUnJeuVideo img {
+    width: 18rem;
+    border-radius: 0.3rem;
+}
+
+.lesPlateformes {
+    margin: 0.5rem;
+}
+.lesPlateformes span {
+    border: 1px solid black;
+    background-color: black;
+    color: white;
+    border-radius: 30px;
+    margin-right: 0.5rem;
+    padding: 0.5rem;
+    font-size: 10px;
+}

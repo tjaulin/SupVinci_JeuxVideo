@@ -39,3 +39,26 @@
     padding: 0.5rem;
     font-size: 10px;
 }
+
+/* Bonus */
+
+.unePlateforme {
+    transition: background-color 0.5s;
+}
+
+.unePlateforme:hover {
+    background-color: white;
+    color: black;
+}
+
+.divGrandeImageJeu {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.divNomJeu {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}

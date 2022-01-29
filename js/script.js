@@ -1,11 +1,14 @@
 const mapJeuxVideo = new Map();
-const mapMesJeuxVideoFavoris = new Map();
 const mapPlateformes = new Map();
 
 window.onload = init;
 let sectionPage;
+let jeuxVideoFavoris = [];
 
 function init() {
+
+    chargerJeuxVideoFavoris();
+
     sectionPage = document.querySelector(".sectionPage");
 
     if (!sectionPage) {
@@ -111,7 +114,6 @@ async function clickBtnPlateformes() {
     afficherLoader();
 
     const valeurBtnPlateformes = divJeuxVideo.getElementsByClassName("unePlateforme").value;
-    console.log(valeurBtnPlateformes);
     const resultatBtnPlateformes = await fetch(`https://www.giantbomb.com/api/games/?api_key=ca43860b5e3eb1bc2856b5612843ec8e65f53a5a&format=json&filter=platforms:${valeurBtnPlateformes}`);
     const resultatRequeteJson = await resultatBtnPlateformes.json();
     const listeResultatViaPlateformes = resultatRequeteJson.results;
@@ -249,6 +251,16 @@ function afficherFicheJeuVideo(unJeu) {
             ajouterAMesFavoris(unJeu);
         }
 
+        const boutonRetirerFavoris = document.querySelector(".btnRetirerFavoris");
+
+        if (!boutonRetirerFavoris) {
+            throw new error("boutonRetirerFavoris est introuvable");
+        }
+
+        boutonRetirerFavoris.onclick = () => {
+            verifierJeuRetirerFavoris(unJeu);
+        }
+
 
         const nbPlateformes = divFicheJeuVideo.querySelector(".divPlateforme");
         if (unJeu.plateformes.length === 1) {
@@ -275,24 +287,7 @@ function afficherFicheJeuVideo(unJeu) {
                 unePlateforme.innerText = unJeu.plateformes[i];
                 afficherPlateforme.append(unePlateforme);
             }
-        }
-        
-        const btnAjouterFavoris = divFicheJeuVideo.querySelector(".btnAjouterFavoris");
-        if (!btnAjouterFavoris) {
-            throw new error ("btnAjouterFavoris introuvable");
-        }
-
-        btnAjouterFavoris.addEventListener("click", afficherPopUpAjouterFavoris);
-
-        const btnRetirerFavoris = divFicheJeuVideo.querySelector(".btnRetirerFavoris");
-        if (!btnRetirerFavoris) {
-            throw new error ("btnRetirerFavoris introuvable");
-        }
-
-        btnRetirerFavoris.addEventListener("click", afficherPopupRetirerFavoris);
-
-        
-        
+        }       
 }
 
 
@@ -322,7 +317,31 @@ function afficherPopUpAjouterFavoris() {
     document.getElementById("popup-1").classList.toggle("active");
 }
 
-function afficherPopupRetirerFavoris() {
+function popupRefuserAjouterFavoris() {
+
+    const popup = document.createElement("div");
+    popup.classList.add("popup")
+    popup.id = "popup-5";
+    sectionPage.append(popup);
+
+    const overlay = document.createElement("div");
+    overlay.classList.add("overlay");
+    popup.append(overlay);
+
+    const content = document.createElement("div");
+    content.classList.add("content");
+    content.innerHTML = `
+        <div class="close-btn" onclick="popupRefuserAjouterFavoris()">&times;</div>
+        <h1>Favoris</h1>
+        <p>Vous ne pouvez pas ajouter un jeu qui est déjà dans vos favoris.</p>
+    `;
+    
+    popup.append(content);
+
+    document.getElementById("popup-5").classList.toggle("active");
+}
+
+function afficherPopupRetirerFavoris(unJeu) {
     const popup = document.createElement("div");
     popup.classList.add("popup")
     popup.id = "popup-2";
@@ -338,10 +357,22 @@ function afficherPopupRetirerFavoris() {
         <h2>Favoris</h2>
         <p>Voulez-vous vraiment retirer ce jeu de vos favoris ?</p>
         <div class="btnPopupValiderRefuser">
-            <div class="lesBtnPopup btnPopupValider" onclick="afficherValidationPopupRetirerFavoris()">Valider</div>
+            <div class="lesBtnPopup btnPopupValider" onclick="afficherPopupRetirerFavoris()">Valider</div>
             <div class="lesBtnPopup btnPopupRefuser" onclick="afficherPopupRetirerFavoris()">Refuser</div>
         </div>
     `;
+
+    const btnPopupValider = content.querySelector(".btnPopupValider");
+
+    if (!btnPopupValider) {
+        throw new error("btnPopupValider est introuvable");
+    }
+
+    btnPopupValider.onclick = () => {
+        retirerJeuxVideoFavoris(unJeu);
+        document.getElementById("popup-2").classList.toggle("active");
+    }
+
     popup.append(content);
 
     document.getElementById("popup-2").classList.toggle("active");
@@ -365,13 +396,39 @@ function afficherValidationPopupRetirerFavoris() {
         <p>Le jeu a bien été retirer de vos favoris</p>
     `;
     popup.append(content);
-
-    document.getElementById("popup-2").classList.toggle("active"); 
+ 
     document.getElementById("popup-3").classList.toggle("active");
+}
+
+function fermerPopupAfficherPopupRetirerFavoris() {
+    document.getElementById("popup-2").classList.toggle("active");
 }
 
 function fermerPopupValiderRetirerFavoris() {
     document.getElementById("popup-3").classList.toggle("active");
+}
+
+function popupRefuserValidationRetirerFavoris() {
+    const popup = document.createElement("div");
+    popup.classList.add("popup")
+    popup.id = "popup-4";
+    sectionPage.append(popup);
+
+    const overlay = document.createElement("div");
+    overlay.classList.add("overlay");
+    popup.append(overlay);
+
+    const content = document.createElement("div");
+    content.classList.add("content");
+    content.innerHTML = `
+        <div class="close-btn" onclick="popupRefuserValidationRetirerFavoris()">&times;</div>
+        <h1>Favoris</h1>
+        <p>Le jeu n'est pas dans vos favoris, suppression impossible !</p>
+    `;
+    
+    popup.append(content);
+
+    document.getElementById("popup-4").classList.toggle("active");
 }
 
 
@@ -383,6 +440,7 @@ async function telechargerDonnees() {
     if (mapJeuxVideo.size > 0) {
         return mapJeuxVideo;
     }
+    
     try {
         const reponse = await fetch("https://www.giantbomb.com/api/games/?api_key=ca43860b5e3eb1bc2856b5612843ec8e65f53a5a&format=json");
         const reponseToJson = await reponse.json();
@@ -397,8 +455,6 @@ async function telechargerDonnees() {
             mapJeuxVideo.set(unJeu.id, unJeu);
         }
         
-        // console.log(listeJeuxVideo);
-        // console.log(mapJeuxVideo);
         return mapJeuxVideo;
 
 
@@ -431,60 +487,120 @@ async function telechargerDonneesPlateformes() {
     }
 }
 
-
 /* Fonctions Favoris */
+function verifierJeu(unJeu) {
+    const jeuTrouver = jeuxVideoFavoris.find(function(jeuTableau) {
+        return jeuTableau.nom === unJeu.nom;
+    });
+    if (!jeuTrouver) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
+function verifierJeuRetirerFavoris(unJeu) {
+    const jeuTrouver = jeuxVideoFavoris.find(function(jeuTableau) {
+        return jeuTableau.nom === unJeu.nom;
+    });
+    if (jeuTrouver) {
+        afficherPopupRetirerFavoris(unJeu);
+    } else {
+        popupRefuserValidationRetirerFavoris();
+    }
+}
 
 function ajouterAMesFavoris(unJeu) {
-    const ajouterJeu = new JeuxVideo(unJeu);
-    mapMesJeuxVideoFavoris.set(ajouterJeu);
-    sauvegarderJeuxVideoFavoris();
+    if (verifierJeu(unJeu)) {
+        popupRefuserAjouterFavoris();
+    } else {
+        afficherPopUpAjouterFavoris();
+        jeuxVideoFavoris.push(unJeu);
+        sauvegarderJeuxVideoFavoris();
+    }
 }
 
 function sauvegarderJeuxVideoFavoris() {
-    const tabJeuxVideoFavoris = Array.from(mapMesJeuxVideoFavoris.values());
-    window.localStorage.setItem("mapMesJeuxVideoFavoris", JSON.stringify(tabJeuxVideoFavoris)); 
+    window.localStorage.setItem("jeuxVideoFavoris", JSON.stringify(jeuxVideoFavoris)); 
 }
 
 function chargerJeuxVideoFavoris() {
-    const mapMesJeuxVideoFavoris = new Map();
-    const resJson = window.localStorage.getItem("mapMesJeuxVideoFavoris");
-
+    const resJson = window.localStorage.getItem("jeuxVideoFavoris");
     if (!resJson) {
-        return mapMesJeuxVideoFavoris;
+        return resJson;
     }
 
     const resTabParse = JSON.parse(resJson);
-    resTabParse.forEach(unJeu => {
-        const ajouterJeu = new JeuxVideo(unJeu);
-        mapMesJeuxVideoFavoris.set(ajouterJeu);
-    });
-    return mapMesJeuxVideoFavoris;
+    for (let i = 0; i < resTabParse.length; i++) {
+        const unJeuObjBasique = resTabParse[i];
+        const unJeu = new JeuxVideo(unJeuObjBasique.listeJeuxVideo);
+        jeuxVideoFavoris.push(unJeu);
+    }
+    return jeuxVideoFavoris;
 }
 
-function retirerJeuxVideoFavoris() {
-    mapMesJeuxVideoFavoris.delete(unJeu);
+
+function retirerJeuxVideoFavoris(unJeu) {
+    jeuxVideoFavoris = jeuxVideoFavoris.filter(function(jeuTableau){
+        if (jeuTableau.nom === unJeu.nom) {
+            return false;
+        } else {
+            return true; //Note à moi même : true - conserve l'élément dans le tableau alors que false le supprime
+        }
+    });
+    afficherValidationPopupRetirerFavoris();
     sauvegarderJeuxVideoFavoris();
 }
 
 function clickBtnFavoris() {
-    const mesJeuxVideoFavoris = chargerJeuxVideoFavoris();
     sectionPage.innerHTML = '';
 
     const divJeuxVideo = document.createElement("div");
     divJeuxVideo.classList.add("divJeuxVideo");
     sectionPage.append(divJeuxVideo);
 
-    mesJeuxVideoFavoris.forEach(unJeu => {
+    for (let i = 0; i < jeuxVideoFavoris.length; i++) {
+        const unJeu = jeuxVideoFavoris[i];
         const divUnJeuVideo = document.createElement("div");
         divUnJeuVideo.classList.add("divSelectionUnJeuVideo");
         divUnJeuVideo.innerHTML = `
-            <img class="grandeImageJeu" src="${unJeu.imageScreenURL}" alt="Image du jeu : ${unJeu.nom}"/>
+            <div class="divGrandeImageJeu">
+                <img class="grandeImageJeu" src="${unJeu.imageScreenURL}" alt="Image du jeu : ${unJeu.nom}"/>
+            </div>
             <div class="lesPlateformes"></div>
-            <p class="nomJeu">${unJeu.nom}</p>
-            
+            <div class="divNomJeu">
+                <p class="nomJeu">${unJeu.nom}</p>
+            </div>
         `;
+
+        const afficherPlateforme = divUnJeuVideo.querySelector(".lesPlateformes");
+        for (let i = 0; i < unJeu.plateformes.length; i++) {
+            if (i > 3) {
+                const plateformesSupplementaires = document.createElement("span");
+                plateformesSupplementaires.classList.add("plateformesSupplementaires");
+                plateformesSupplementaires.innerText = `+${unJeu.plateformes.length - 4}`;
+                afficherPlateforme.append(plateformesSupplementaires);
+                break;
+            } else  {
+                const unePlateforme = document.createElement("span");
+                unePlateforme.classList.add("unePlateforme");
+                unePlateforme.innerText = unJeu.plateformes[i];
+                afficherPlateforme.append(unePlateforme);
+            }
+        }
+
+        const divGrandeImageJeu = divUnJeuVideo.querySelector(".divGrandeImageJeu")
+        divGrandeImageJeu.onclick = () => {
+            afficherFicheJeuVideo(unJeu);
+        }
+
+        const divNomJeu = divUnJeuVideo.querySelector(".divNomJeu");
+        divNomJeu.onclick = () => {
+            afficherFicheJeuVideo(unJeu);
+        }
+
         divJeuxVideo.append(divUnJeuVideo);
-    });
+    }
 }
 
 /* Classe */
@@ -508,6 +624,7 @@ class JeuxVideo {
     dateSortie = -1; //on retourne seulement l'année de sorti du jeu si il n'est pas encore sorti
     descriptionCourte = "";
     descriptionLongue = "";
+    listeJeuxVideo = "";
 
     constructor(listeJeuxVideo) {
         this.id = listeJeuxVideo.id;
@@ -532,5 +649,6 @@ class JeuxVideo {
 
         this.descriptionCourte = listeJeuxVideo.deck;
         this.descriptionLongue = listeJeuxVideo.description;
+        this.listeJeuxVideo = listeJeuxVideo;
     }
 }
